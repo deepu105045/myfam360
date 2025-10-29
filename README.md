@@ -1,16 +1,56 @@
-# React + Vite
+# myfam360
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Vite + React starter (JavaScript) with:
+- Firebase Auth + Firestore
+- Zustand for auth state
+- React Router
+- Tailwind CSS (mobile-first)
+- PWA support via vite-plugin-pwa
 
-Currently, two official plugins are available:
+## Quick start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Install deps:
+```bash
+npm install
+```
 
-## React Compiler
+2. Run dev server:
+```bash
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+3. Build:
+```bash
+npm run build
+```
 
-## Expanding the ESLint configuration
+## Notes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Firebase config is provided via `.env`. Ensure values are correct.
+- For production, set `VITE_ENV=prod`.
+- Add proper Firestore security rules before heavy use.
+
+
+## Firebase Hosting deploy
+
+1. Install Firebase CLI (if not installed):
+```bash
+npm install -g firebase-tools
+```
+2. Login and initialize (only the first time):
+```bash
+firebase login
+firebase init hosting
+# - Use existing project: fam360-official (or choose your project)
+# - Set public directory to `dist`
+# - Configure as single-page app: Yes
+# - Do not overwrite `index.html` when asked (choose 'No')
+```
+3. Build and deploy:
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+## Firestore rules
+A sample `firestore.rules` file is included in the project root. Review and adapt the rules to match your family membership model before deploying to production.

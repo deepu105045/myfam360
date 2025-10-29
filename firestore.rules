@@ -1,0 +1,28 @@
+// Minimal Firestore rules for fam360 app.
+// Adjust to fit your family membership model before production.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // User documents under fam360/{env}/users/{uid}
+    match /fam360/{env}/users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Family collections: fam360/{env}/families/{familyId}/expenses/{expenseId}
+    match /fam360/{env}/families/{familyId}/expenses/{expenseId} {
+      allow read: if isMemberOfFamily(familyId);
+      allow create: if isMemberOfFamily(familyId) && request.resource.data.keys().hasAll(['title','amount','createdAt']);
+      allow update, delete: if false; // restrict updates/deletes for now; change as needed
+    }
+
+    function isMemberOfFamily(familyId) {
+      return request.auth != null && exists(/databases/$(database)/documents/fam360/$(getEnv())/families/$(familyId)/members/$(request.auth.uid));
+    }
+
+    // Helper to get env from request path — not directly available; you may hardcode dev/prod in rules or create a mapping.
+    function getEnv() {
+      return 'dev';
+    }
+  }
+}
